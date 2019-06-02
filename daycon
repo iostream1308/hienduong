@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+#define ll long long
+#define For(i,a,b) for(int i=a;i<=b;i++)
+#define forc(i,a,b) for(int i=a;i>=b;i--)
+using namespace std;
+map<ll, set<ll> > vt;
+set<ll> res;
+ll n,m,a[1000010],b[1000010];
+template <typename T> inline void read(T & x)
+{
+    char c; bool nega=0;
+    while((!isdigit(c=getchar()))&&c!='-');
+    if(c=='-')
+    {
+        c=getchar();
+        nega=1;
+    }
+    x=c-48;
+    while(isdigit(c=getchar())) x=x*10+c-48;
+    if(nega) x=-x;
+}
+template <typename T> void Write(T x) {if (x > 9) Write(x/10); putchar(x%10+48);}
+template <typename T> void write(T x) {if (x < 0) {putchar('-'); x = -x;} Write(x);}
+int main()
+{
+    freopen("h.inp","r",stdin);
+    read(n); read(m);
+    For(i,1,n) read(a[i]);
+    For(i,1,m) read(b[i]);
+    For(i,1,m) vt[b[i]].insert(i);
+    For(i,1,n)
+    {
+        ll fi=*vt[a[i]].begin();
+        while(fi!=*vt[a[i]].end())
+        {
+            ll xd=fi;
+            vt[a[i]].erase(fi);
+            res.insert(xd);
+            ll vtx=*res.upper_bound(xd);
+            if(vtx!=*res.end())
+            {
+                ll nope=vtx;
+                res.erase(vtx);
+                vt[b[nope]].insert(nope);
+                fi=*vt[a[i]].upper_bound(nope);
+                continue;
+            }
+            break;
+        }
+    }
+    cout<<res.size();
+}
